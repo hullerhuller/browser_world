@@ -7,6 +7,9 @@ export default {
     base: '/browser_world/'
   },
 
+  generate: {
+    dir: 'docs'
+  },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
