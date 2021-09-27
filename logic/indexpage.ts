@@ -21,19 +21,19 @@ export default class PostPreview extends Vue {
     dateIt: string = ''
 
     choosen: chooseItem[] = [{
-        avatar: '/favicon.ico',
+        avatar: '/browser_world/favicon.ico',
         title: '1',
         text: `<font color="red">Ali Connors</font> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
         comment:'yeah',
         choosen: 1
     }, {
-        avatar: '/favicon.ico',
+        avatar: '/browser_world/favicon.ico',
         title: '2',
         text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
         comment:'yeah',
         choosen: 2
     }, {
-        avatar: '/favicon.ico',
+        avatar: '/browser_world/favicon.ico',
         title: '3?',
         text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
         comment:'yeah',
@@ -43,7 +43,7 @@ export default class PostPreview extends Vue {
     ]
 
     logs: logItem[] = [{
-        avatar: '/favicon.ico',
+        avatar: '/browser_world/favicon.ico',
         title: 'Brunch this weekend?',
         text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
         comment:'yeah',
