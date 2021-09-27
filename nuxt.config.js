@@ -1,10 +1,12 @@
 import colors from 'vuetify/es5/util/colors'
 
+const routerBaseURL = "/browser_world/"
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
   router: {
-    base: '/browser_world/'
+    base: routerBaseURL
   },
 
   generate: {
@@ -18,7 +20,7 @@ export default {
     titleTemplate: '%s - browser_world',
     title: 'browser_world',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
@@ -27,8 +29,11 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/browser_world/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: routerBaseURL +'/favicon.ico' }
     ]
+  },
+  env:{
+    BASE_URL:routerBaseURL
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
