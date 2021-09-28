@@ -1,7 +1,9 @@
 
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
+import { warriorHero } from './data/charactor'
 import { makeStaticFileURL } from './common'
-import { chooseItem, logItem } from './commonInterface'
+import { charactorData, chooseItem, eventResult, logItem, stageItem } from './commonInterface'
+import { goblinStage } from './data/sample'
 
 
 
@@ -10,49 +12,53 @@ import { chooseItem, logItem } from './commonInterface'
 export default class PostPreview extends Vue {
 
     formError: string = ''
-    dateJi: string = ''
-    dateIt: string = ''
+    nowStageTitle: string = ''
+    nowStageText: string = ''
 
-    choosen: chooseItem[] = [{
-        avatar: makeStaticFileURL('favicon.ico'),
-        title: '1',
-        text: `<font color="red">Ali Connors</font> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-        comment:'yeah',
-        choosen: 1
-    }, {
-        avatar: makeStaticFileURL('favicon.ico'),
-        title: '2',
-        text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-        comment:'yeah',
-        choosen: 2
-    }, {
-        avatar: makeStaticFileURL('favicon.ico'),
-        title: '3?',
-        text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-        comment:'yeah',
-        choosen: 3
-    }
+    nowEventTitle: string = ''
+    nowEventText: string = ''
 
-    ]
+    nowstage:stageItem = goblinStage
 
-    logs: logItem[] = [{
-        avatar: makeStaticFileURL('favicon.ico'),
-        title: 'Brunch this weekend?',
-        text: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-        comment:'yeah',
-    }
-    ]
+    choosen: chooseItem[] = []
 
+
+    logs: logItem[] = []
+
+    defaultStatus:charactorData= warriorHero
+    
     mounted() {
+        this.choiceEventFromNow()
     }
 
     chooseCard(chooseCard: chooseItem) {
-        this.logs.push(chooseCard)
+
+        let choosenAction:eventResult  = {
+            logs: this.logs,
+            charastatus: this.defaultStatus,
+            choosenCard: chooseCard,
+            depth: this.nowstage.depth,
+            bossHp: this.nowstage.lastBoss.hp,
+            understanding: this.nowstage.understanding,
+            isWinLastBoss: new eventResult().isWinLastBoss
+        }
+        let choosenResult = this.nowstage.eventChoise().choosenResults(choosenAction)
+        
+        this.logs = choosenResult.logs
+        this.defaultStatus = choosenResult.charastatus
+        this.nowstage.depth = choosenResult.depth
+        this.nowstage.lastBoss.hp = choosenResult.bossHp
+        this.nowstage.understanding = choosenResult.understanding
         if(document.getElementById('scroll') !=null){
             document.getElementById('scroll')!.scrollTo(0, 10000000);
         }
     }
 
+    choiceEventFromNow(){
+
+        this.choosen = this.nowstage.eventChoise().choosens
+
+    }
 
     next() {
         this.formError = ''

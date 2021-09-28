@@ -3,11 +3,47 @@
     <v-col cols="12">
       <font color="red">{{ formError }}</font>
     </v-col>
+    <v-col cols="12">
+      <v-card  class="elevation-1">
+      <v-row justify="start" align="start">
+        <v-col  cols="12" >
+          <div class="title">
+            {{nowstage.title()}}
+          </div>
+        </v-col>
+        <v-col  cols="12" >
+
+          <div class="subtitle">
+            {{nowstage.text()}}
+          </div>
+        </v-col>
+      </v-row>
+
+      </v-card>
+    </v-col>
+    <v-col cols="12" >
+      <v-card  class="elevation-1">
+      <v-row justify="start" align="start">
+        <v-col  cols="12" >
+          <div class="title">
+            {{nowstage.title()}}
+          </div>
+        </v-col>
+        <v-col  cols="12" >
+
+          <div class="subtitle">
+            {{nowstage.text()}}
+          </div>
+        </v-col>
+      </v-row>
+
+      </v-card>
+    </v-col>
     <v-col cols="8">
       <v-row justify="start" align="start">
         <template v-for="(item, index) in choosen">
-          <v-col :key="index" cols="4">
-            <v-card @click="chooseCard(item)" class="elevation-1">
+          <v-col :key="index" cols="4" >
+            <v-card @click="chooseCard(item)" :disabled="!item.choosenFunction(defaultStatus)" class="elevation-1">
               <v-row justify="start" align="start" no-gutters class="pl-4">
                 <v-col cols="12">
                   <v-list-item-content>
@@ -18,7 +54,7 @@
                   </v-list-item-content>
                 </v-col>
                 <v-col cols="4">
-                  <v-list-item-avatar>
+                  <v-list-item-avatar  v-if="item.avatar != ''">
                     <v-img  :src="item.avatar"></v-img>
                   </v-list-item-avatar>
                 </v-col>
@@ -49,7 +85,7 @@
                 </v-list-item-content>
               </v-col>
               <v-col cols="2">
-                <v-list-item-avatar>
+                <v-list-item-avatar v-if="item.avatar != ''">
                   <v-img :src="item.avatar"></v-img>
                 </v-list-item-avatar>
               </v-col>
