@@ -1,9 +1,9 @@
 
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { warriorHero } from './data/charactor'
 import { makeStaticFileURL } from './common'
-import { charactorData, chooseItem, eventResult, logItem, stageItem } from './commonInterface'
-import { goblinStage } from './data/sample'
+import { charactorData, chooseItem, eventResult, logItem, stageItem, world } from './commonInterface'
+import { goblin, goblinStage } from './data/sample'
 
 
 
@@ -18,47 +18,52 @@ export default class PostPreview extends Vue {
     nowEventTitle: string = ''
     nowEventText: string = ''
 
-    nowstage:stageItem = goblinStage
+    newWorld :world = new world({
+        charactor:warriorHero,
+        choosen:[],
+        logs:[],
+        nowstage :goblinStage
+    })
 
-    choosen: chooseItem[] = []
 
-
-    logs: logItem[] = []
-
-    defaultStatus:charactorData= warriorHero
-    
     mounted() {
         this.choiceEventFromNow()
     }
 
     chooseCard(chooseCard: chooseItem) {
 
-        let choosenAction:eventResult  = {
-            logs: this.logs,
-            charastatus: this.defaultStatus,
-            choosenCard: chooseCard,
-            depth: this.nowstage.depth,
-            bossHp: this.nowstage.lastBoss.hp,
-            understanding: this.nowstage.understanding,
-            isWinLastBoss: new eventResult().isWinLastBoss
-        }
-        let choosenResult = this.nowstage.eventChoise().choosenResults(choosenAction)
-        
-        this.logs = choosenResult.logs
-        this.defaultStatus = choosenResult.charastatus
-        this.nowstage.depth = choosenResult.depth
-        this.nowstage.lastBoss.hp = choosenResult.bossHp
-        this.nowstage.understanding = choosenResult.understanding
-        if(document.getElementById('scroll') !=null){
-            document.getElementById('scroll')!.scrollTo(0, 10000000);
-        }
+        this.newWorld.action( new eventResult({
+            world: this.newWorld,
+        choosenCard: chooseCard}))
+
+        // this.logs = choosenResult.logs
+        // this.defaultStatus = choosenResult.charastatus
+        // this.nowstage.depth = choosenResult.depth
+        // this.nowstage.nowLastBoss = choosenResult.nowLastBoss
+        // this.nowstage.understanding = choosenResult.understanding
+
+
+        // this.choosen = this.nowstage.eventChoise().choosens
     }
 
-    choiceEventFromNow(){
+    choiceEventFromNow() {
 
-        this.choosen = this.nowstage.eventChoise().choosens
+       this.newWorld.init()
 
     }
+    @Watch('newWorld.logs')
+    onChange() {
+        setTimeout(() => {
+            let element = document.getElementById('scroll')
+            if (element != null) {
+                element.scrollTo({
+                    top: element.scrollHeight,
+                    behavior: 'smooth',
+                });
+            }
+        }, 100)
+    }
+
 
     next() {
         this.formError = ''

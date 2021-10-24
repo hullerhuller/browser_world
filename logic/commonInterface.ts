@@ -65,23 +65,80 @@ export class charactorData {
         }
         return deepCopy
     }
-
-
-
-
 }
 
-export class eventResult {
-    logs!: logItem[];
-    charastatus!: charactorData;
-    choosenCard!: chooseItem;
-    depth!: number;
-    middleBossHp?: number
-    bossHp!: number;
-    understanding!: number;
+export class world {
+    charactor: charactorData
+    logs: logItem[]
+    choosen: chooseItem[]
+    nowstage: stageItem
 
-    isWinLastBoss = () =>  {
-        return this.bossHp <= 0
+    init = () => {
+        this.choosen = this.nowstage.eventChoise().choosens
+    }
+
+    refresh = (event: eventResult) => {
+
+        this.charactor = event.charastatus
+        this.logs = event.logs
+        this.nowstage.depth = event.depth
+        this.nowstage.nowDepth = event.nowDepth
+        this.nowstage.understanding = event.understanding
+
+        this.nowstage.nowLastBoss = event.nowLastBoss
+        this.nowstage.nowMiddleBoss = event.nowMiddleBoss
+
+
+        this.choosen = this.nowstage.eventChoise().choosens
+    }
+
+    action = (event: eventResult) => {
+        this.refresh(this.nowstage.eventChoise().choosenResults(event))
+
+    }
+    constructor(params: {
+        charactor: charactorData
+        logs: logItem[]
+        choosen: chooseItem[]
+        nowstage: stageItem
+    }) {
+        this.charactor = params.charactor
+        this.logs = params.logs
+        this.choosen = params.choosen
+        this.nowstage = params.nowstage
+    }
+}
+
+
+
+export class eventResult {
+    logs: logItem[];
+    charastatus: charactorData;
+    choosenCard: chooseItem;
+    depth: number;
+    nowDepth: number;
+    nowMiddleBoss?: bossItem
+    middleBoss: { [key: string]: bossItem }
+    nowLastBoss?: bossItem
+    lastBoss: { [key: string]: bossItem };
+    understanding: number;
+
+    isWinLastBoss = () => {
+        return this.nowLastBoss !== undefined
+            && this.nowLastBoss.nowHp <= 0
+    }
+    constructor(params: { world: world, choosenCard: chooseItem }) {
+        this.logs = params.world.logs
+        this.charastatus = params.world.charactor
+        this.choosenCard = params.choosenCard
+        this.middleBoss = params.world.nowstage.middleBoss
+        this.nowMiddleBoss = params.world.nowstage.nowMiddleBoss
+        this.lastBoss = params.world.nowstage.lastBoss
+        this.nowLastBoss = params.world.nowstage.nowLastBoss
+        this.depth = params.world.nowstage.depth
+        this.nowDepth = params.world.nowstage.nowDepth || 0
+        this.understanding = params.world.nowstage.understanding
+
     }
 }
 
@@ -100,24 +157,25 @@ export interface stageItem {
     title: () => string
     text: () => string
     depth: number
-    middleBossDepth?: number
-    middleBoss?: bossItem
+    nowDepth: number
+    nowMiddleBoss?: bossItem
+    middleBossDepth: number
+    middleBoss: { [key: string]: bossItem }
     lastBossDepth: number
-    lastBoss: bossItem
+    nowLastBoss?: bossItem
+    lastBoss: { [key: string]: bossItem }
     understanding: number
-    ramdomEvent: eventItem[]
+    ramdomEvent: { [key: string]: eventItem }
     eventChoise: () => eventItem
 }
 export interface bossItem {
     title: () => string
     text: () => string
     hp: number
+    nowHp: number
     events: eventItem[]
     eventChoise: () => eventItem
 }
 
 
-export function isWinLastBoss(params: eventResult) {
-    return
-}
 
